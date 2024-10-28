@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Manage Files</title>
+    <style>
+        /* Basic body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container to center content */
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        /* Styling for textareas and buttons */
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #response {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .file-item button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Spinner for loading animation */
+        .spinner {
+            display: none;
+            margin: 10px auto;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Center the checkbox and label */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Center content on page */
+        .container {
+            margin: auto;
+            padding: 30px;
+        }
+    </style>
+    <!-- Include marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Ask a Question</h2>
+        <textarea id="prompt" placeholder="Type your question here..."></textarea>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="use-rag">
+            <label for="use-rag">Enable Retrieval-Augmented Generation (RAG)</label>
+        </div>
+
+        <button type="button" id="send-button" onclick="sendPrompt()">Submit Prompt</button>
+
+        <div class="spinner" id="spinner"></div>
+
+        <div id="response">Response will appear here...</div>
+
+        <h2>Upload and Manage PDF Documents</h2>
+        <input type="file" id="file" name="file" accept="application/pdf">
+        <button type="button" id="upload-button" onclick="uploadFile()">Upload PDF</button>
+        <div id="upload-status"></div>
+
+        <h3>Files in Blob Storage</h3>
+        <ul id="file-list" class="file-list">
+            <!-- Files will be dynamically populated here -->
+        </ul>
+    </div>
+
+    <script>
+        // Load existing files from blob storage when the page loads
+        window.onload = function() {
+            loadFiles();
+        };
+
+        function loadFiles() {
+            fetch('/list-files')
+            .then(response => response.json())
+            .then(files => {
+                const fileList = document.getElementById('file-list');
+                fileList.innerHTML = '';  // Clear existing content
+
+                if (files.length > 0) {
+                    files.forEach(file => {
+                        const fileItem = document.createElement('li');
+                        fileItem.className = 'file-item';
+                        fileItem.innerHTML = `
+                            <span>${file.name}</span>
+                            <button onclick="deleteFile('${file.name}')">Delete</button>
+                        `;
+                        fileList.appendChild(fileItem);
+                    });
+                } else {
+                    fileList.innerHTML = '<li>No files found.</li>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching file list:', error);
+            });
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            const uploadStatus = document.getElementById('upload-status');
+            const uploadButton = document.getElementById('upload-button');
+
+            if (!file) {
+                uploadStatus.innerText = 'Please select a file to upload.';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            uploadButton.disabled = true;
+            uploadStatus.innerText = 'Uploading...';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                uploadButton.disabled = false;
+                uploadStatus.innerText = data.message || `Error: ${data.error}`;
+                loadFiles();  // Reload the file list after uploading
+            })
+            .catch(error => {
+                uploadButton.disabled = false;
+                uploadStatus.innerText = `Error: ${error.message}`;
+            });
+        }
+
+        function deleteFile(filename) {
+            fetch('/delete-file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || `Error: ${data.error}`);
+                loadFiles();  // Reload the file list after deleting
+            })
+            .catch(error => {
+                console.error('Error deleting file:', error);
+            });
+        }
+
+        function sendPrompt() {
+            const prompt = document.getElementById('prompt').value;
+            const useRag = document.getElementById('use-rag').checked;
+            const responseDiv = document.getElementById('response');
+            const spinner = document.getElementById('spinner');
+            const sendButton = document.getElementById('send-button');
+
+            // Show spinner and disable button
+            spinner.style.display = 'block';
+            sendButton.disabled = true;
+            responseDiv.innerHTML = '';  // Clear previous response
+
+            fetch('/process-prompt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'prompt': prompt,
+                    'use_rag': useRag  // Pass RAG checkbox status to the backend
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide spinner and enable button
+                spinner.style.display = 'none';
+                sendButton.disabled = false;
+
+                if (data.response) {
+                    // Render response with markdown using marked.js
+                    responseDiv.innerHTML = marked.parse(data.response);
+                } else if (data.error) {
+                    responseDiv.innerText = 'Error: ' + data.error;
+                }
+            })
+            .catch(error => {
+                // Hide spinner and enable button
+                spinner.style.display = 'none';
+                sendButton.disabled = false;
+                responseDiv.innerText = 'Error: ' + error.message;
+            });
+        }
+    </script>
+</body>
+</html>
