@@ -4,6 +4,24 @@ This project is designed to interface with the Azure Open AI Resource, providing
 
 <img width="1680" alt="image" src="https://github.com/user-attachments/assets/44ab2e30-ef28-4075-801a-81483cdf4684">
 
+## Introduction
+
+This python based application has been developed using OpenAIs Code Pilot and intends to showcase how RAG is performed using Azure and Azure Open AI services.
+In order to execute the application successfully you need to have serveral Azure resources
+1. Azure Storage Account to store documents
+2. Azure Search Service is where the docuemts are indexed
+3. Azure Open AI Service is where the model i.e. gpt-4o is hosted
+
+### Things you can do
+
+When entering a prompt you can send the prompt to the Azure Open AI resource and the deployed model i.e. gpt-4o is answering.
+You can see the prompt und reponse as debug messages
+
+When checking the RAG checkbox the prompt is modified based on the documents that are found based on the indexer.
+
+You can upload and delete documents that are stored on the storage account
+- The indexer should be configured to start indexing all documents every 5 minutes
+
 ## Getting Started
 
 Follow these instructions to set up the project on your local machine.
