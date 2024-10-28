@@ -57,6 +57,10 @@ Follow these instructions to set up the project on your local machine.
 3. **Activate environment**: `source venv/bin/activate` (macOS/Linux) or `venv\Scripts\activate` (Windows)
 4. **Install dependencies**: `pip install -r requirements.txt`
 5. **Create a `.env`file**: `touch .env`
+   - All API keys can be optained from the azure resources
+     - Azure Storage Account -> Security + Networking > Access Keys
+     - Azure Search -> Settings > Keys (you need the primary admin key)
+     - Azure Open AI -> Resource management > Keys and Endpoints
    
    ```
    # Azure Blob Storage Configuration
