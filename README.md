@@ -36,7 +36,8 @@ Follow these instructions to set up the project on your local machine.
    AZURE_BLOB_CONTAINER=
 
    # Azure OpenAI Configuration
-   AZURE_OPENAI_API_KEY=   AZURE_OPENAI_ENDPOINT=https://atclaoai18102024.openai.azure.com/
+   AZURE_OPENAI_API_KEY=
+   AZURE_OPENAI_ENDPOINT=
    AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o  # This should match your deployed model (e.g., gpt-4)
 
    # Azure Cognitive Search Configuration
