@@ -9,8 +9,22 @@ This project is designed to interface with the Azure Open AI Resource, providing
 This python based application has been developed using OpenAIs Code Pilot and intends to showcase how RAG is performed using Azure and Azure Open AI services.
 In order to execute the application successfully you need to have serveral Azure resources
 1. Azure Storage Account to store documents
+   - Create a simple azure stoprage account and a container called upload
+     ![image](https://github.com/user-attachments/assets/12649106-5d45-462d-b1b6-2167d4fb3096)
+
 2. Azure Search Service is where the docuemts are indexed
+   - I recommend to create the indexer via the import data function
+     ![image](https://github.com/user-attachments/assets/5f1d0689-fd52-4a8e-8b55-147b0ad9a822)
+
+     <img width="1272" alt="image" src="https://github.com/user-attachments/assets/6df5cb6a-06c8-4aa7-be36-5aa67c37de24">
+
 3. Azure Open AI Service is where the model i.e. gpt-4o is hosted
+   - ![image](https://github.com/user-attachments/assets/abc87ccc-6e89-4807-86aa-636e77f25054)
+
+
+This is the overview of the resources needed in Azure
+<img width="1369" alt="image" src="https://github.com/user-attachments/assets/7d36661b-1e22-46e7-ba23-70d43e46b362">
+
 
 ### Things you can do
 
