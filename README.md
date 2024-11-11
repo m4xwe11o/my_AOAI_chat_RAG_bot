@@ -1,6 +1,6 @@
 # Azure OPEN AI Chat bot with RAG
 
-This project is designed to interface with the Azure Open AI Resource, providing functionality to perform RAG enabled prompting with user-friendly format. The project setup includes a virtual environment to manage dependencies.
+This project is designed to interact with Azure Open AI resources, providing functionality to perform RAG enabled prompting with a user-friendly format. The project setup includes a virtual environment to manage dependencies.
 
 <img width="1680" alt="image" src="https://github.com/user-attachments/assets/44ab2e30-ef28-4075-801a-81483cdf4684">
 
