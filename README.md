@@ -3,8 +3,6 @@
 This project is designed to interact with Azure Open AI resources, providing functionality to perform RAG enabled prompting with a user-friendly format. The project setup includes a virtual environment to manage dependencies.
 
 <img width="1680" alt="image" src="https://github.com/user-attachments/assets/44ab2e30-ef28-4075-801a-81483cdf4684">
-![image](https://github.com/user-attachments/assets/f95275b1-546a-4e16-8f9b-25b02164f837)
-
 
 ## Introduction
 
