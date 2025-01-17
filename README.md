@@ -53,26 +53,45 @@ Follow these instructions to set up the project on your local machine.
    git clone https://github.com/m4xwe11o/my_AOAI_chat_RAG_bot.git
    cd my_AOAI_chat_RAG_bot
 
-2. **Set up virtual environment**: `python3 -m venv venv`
-3. **Activate environment**: `source venv/bin/activate` (macOS/Linux) or `venv\Scripts\activate` (Windows)
-4. **Install dependencies**: `pip install -r requirements.txt`
-5. **Create a `.env`file**: `touch .env`
+2. **Set up virtual environment**:
+   ```bash
+   python3 -m venv venv
+   
+4. **Activate environment**:
+   macOS/Linux
+   ```bash
+   source venv/bin/activate
+   ```
+
+   Windows
+   ```bash
+   venv\Scripts\activate
+   
+6. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   
+7. **Create a `.env`file**:
+   ```bash
+   touch .env
+   ```
+   
    - All API keys can be optained from the azure resources
      - Azure Storage Account -> Security + Networking > Access Keys
      - Azure Search -> Settings > Keys (you need the primary admin key)
      - Azure Open AI -> Resource management > Keys and Endpoints
    
    ```
-   # Azure Blob Storage Configuration
+   #Azure Blob Storage Configuration
    AZURE_BLOB_CONNECTION_STRING=
    AZURE_BLOB_CONTAINER=
 
-   # Azure Cognitive Search Configuration
+   #Azure Cognitive Search Configuration
    AZURE_SEARCH_ENDPOINT=
    AZURE_SEARCH_API_KEY=
    AZURE_SEARCH_INDEX_NAME=
 
-   # .env
+   #Azure OpenAI COnfiguration
    AZURE_OPENAI_API_KEY=
    AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o # The deployment name for your model in Azure OpenAI
    AZURE_OPENAI_ENDPOINT=
